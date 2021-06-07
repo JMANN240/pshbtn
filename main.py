@@ -1,9 +1,12 @@
 from sqlite3.dbapi2 import connect
 from flask import Flask, render_template, request, make_response, flash, redirect
 from passlib.hash import sha256_crypt as sha256
+from dotenv import load_dotenv
 import json
 import sqlite3
 import os
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
