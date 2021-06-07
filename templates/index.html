@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/index.css')}}">
+<script defer src="{{url_for('static', filename='js/jquery-3.6.0.js')}}"></script>
+<script defer src="{{url_for('static', filename='js/index.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+<div id="hundred"></div>
+{% endblock %}
