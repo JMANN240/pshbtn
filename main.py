@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
 @app.context_processor
-def add_user():
+def inject_user():
     if 'username' in session:
         logged_in = True
         username = session['username']
@@ -20,6 +20,10 @@ def add_user():
         logged_in = False
         username = None
     return dict(logged_in=logged_in, username=username)
+
+@app.context_processor
+def inject_debug():
+    return dict(debug=app.debug)
 
 @app.route("/")
 def index():
