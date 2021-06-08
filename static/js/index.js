@@ -26,4 +26,5 @@ $(document).on('click', '.btn', (e) => {
             console.log(req);
         }
     });
+    navigator.vibrate(100);
 });

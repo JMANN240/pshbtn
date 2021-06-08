@@ -14,26 +14,17 @@ app.secret_key = os.getenv("SECRET_KEY")
 @app.context_processor
 def add_user():
     sid = request.cookies.get('sessionID')
-    logged_in = sid is not None
-    if logged_in:
-        with sqlite3.connect("database.db") as connection:
-            cursor = connection.cursor()
-            cursor.execute('SELECT username FROM users WHERE sessionID=?', (sid,))
-            username = cursor.fetchone()[0]
-    else:
-        username = None
+    with sqlite3.connect("database.db") as connection:
+        cursor = connection.cursor()
+        cursor.execute('SELECT username FROM users WHERE sessionID=?', (sid,))
+        user = cursor.fetchone()
+        print(f"USER IS {bool(user)}")
+        logged_in = bool(user)
+    username = user[0] if user else None
     return dict(logged_in=logged_in, username=username)
 
 @app.route("/")
 def index():
-    sid = request.cookies.get('sessionID')
-    print(f"SID: {sid}")
-    with sqlite3.connect("database.db") as connection:
-        cursor = connection.cursor()
-        cursor.execute('SELECT username FROM users WHERE sessionID=?', (sid,))
-        username = cursor.fetchone()
-        print(f"Logged in as {username}")
-        
     return render_template('index.html')
 
 @app.route("/api/checks", methods=["GET", "POST"])
@@ -46,7 +37,11 @@ def checks():
         with sqlite3.connect("database.db") as connection:
             cursor = connection.cursor()
             cursor.execute('SELECT state FROM users WHERE sessionID=?', (sid,))
-            return {"state": json.loads(cursor.fetchone()[0])}
+            user = cursor.fetchone()
+            if user:
+                return {"state": json.loads(user[0])}
+            else:
+                return "401"
 
     if request.method == 'POST':
         pieces = request.form.get('id').split('-')
@@ -55,11 +50,14 @@ def checks():
         with sqlite3.connect("database.db") as connection:
             cursor = connection.cursor()
             cursor.execute('SELECT state FROM users WHERE sessionID=?', (sid,))
-            state = json.loads(cursor.fetchone()[0])
-            state[buttonRow][buttonCol] = not state[buttonRow][buttonCol]
-            cursor.execute('UPDATE users SET state=? WHERE sessionID=?', (json.dumps(state), sid))
-        return json.dumps(state)
-    return ""
+            user = cursor.fetchone()
+            if user:
+                state = json.loads(user[0])
+                state[buttonRow][buttonCol] = not state[buttonRow][buttonCol]
+                cursor.execute('UPDATE users SET state=? WHERE sessionID=?', (json.dumps(state), sid))
+                return json.dumps(state)
+            else:
+                return "401"
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
