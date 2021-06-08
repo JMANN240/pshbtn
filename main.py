@@ -37,7 +37,7 @@ def user():
                     return {"state": json.loads(user[0]), "color": user[1]}
                 else:
                     return "401"
-        return {"state": [[False]*10]*10}
+        return {"state": [[False]*10]*10, "color": "#ffff00"}
 
     if request.method == 'POST':
         if 'username' in session:
