@@ -1,4 +1,12 @@
 $(document).ready(() => {
+    for (let row = 0; row < 10; row++) {
+        for (let col = 0; col < 10; col++) {
+            $('#hundred').append(`
+                <input type="checkbox" id="btn-${row}-${col}" style="display: none;">
+                <label for="btn-${row}-${col}" id="lbl-${row}-${col}" class="btn"></label>
+            `);
+        }
+    }
     $.ajax({
         type: 'GET',
         url: '/api/user',
@@ -8,10 +16,7 @@ $(document).ready(() => {
             document.documentElement.style.setProperty('--light-darker', tinycolor(req.color).darken(2).toString());
             for (let [row, rowvals] of req.state.entries()) {
                 for (let [col, value] of rowvals.entries()) {
-                    $('#hundred').append(`
-                        <input type="checkbox" id="btn-${row}-${col}" style="display: none;"${value ? ' checked' : ''}>
-                        <label for="btn-${row}-${col}" id="lbl-${row}-${col}" class="btn"></label>
-                    `);
+                    $(`#btn-${row}-${col}`).attr('checked', value);
                 }
             }
         }
