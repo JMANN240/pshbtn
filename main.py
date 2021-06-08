@@ -1,5 +1,5 @@
 from sqlite3.dbapi2 import connect
-from flask import Flask, render_template, request, make_response, flash, redirect
+from flask import Flask, render_template, request, make_response, flash, redirect, session
 from passlib.hash import sha256_crypt as sha256
 from dotenv import load_dotenv
 import json
@@ -13,51 +13,57 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 @app.context_processor
 def add_user():
-    sid = request.cookies.get('sessionID')
-    with sqlite3.connect("database.db") as connection:
-        cursor = connection.cursor()
-        cursor.execute('SELECT username FROM users WHERE sessionID=?', (sid,))
-        user = cursor.fetchone()
-        print(f"USER IS {bool(user)}")
-        logged_in = bool(user)
-    username = user[0] if user else None
+    if 'username' in session:
+        logged_in = True
+        username = session['username']
+    else:
+        logged_in = False
+        username = None
     return dict(logged_in=logged_in, username=username)
 
 @app.route("/")
 def index():
     return render_template('index.html')
 
-@app.route("/api/checks", methods=["GET", "POST"])
-def checks():
-    sid = request.cookies.get('sessionID')
-    if sid is None:
-        return "401"
-    
+@app.route("/api/user", methods=["GET", "POST"])
+def user():
     if request.method == 'GET':
-        with sqlite3.connect("database.db") as connection:
-            cursor = connection.cursor()
-            cursor.execute('SELECT state FROM users WHERE sessionID=?', (sid,))
-            user = cursor.fetchone()
-            if user:
-                return {"state": json.loads(user[0])}
-            else:
-                return "401"
+        if 'username' in session:
+            with sqlite3.connect("database.db") as connection:
+                cursor = connection.cursor()
+                cursor.execute('SELECT state, color FROM users WHERE username=?', (session['username'],))
+                user = cursor.fetchone()
+                if user:
+                    return {"state": json.loads(user[0]), "color": user[1]}
+                else:
+                    return "401"
+        return {"state": [[False]*10]*10}
 
     if request.method == 'POST':
-        pieces = request.form.get('id').split('-')
-        buttonRow = int(pieces[1])
-        buttonCol = int(pieces[2])
-        with sqlite3.connect("database.db") as connection:
-            cursor = connection.cursor()
-            cursor.execute('SELECT state FROM users WHERE sessionID=?', (sid,))
-            user = cursor.fetchone()
-            if user:
-                state = json.loads(user[0])
-                state[buttonRow][buttonCol] = not state[buttonRow][buttonCol]
-                cursor.execute('UPDATE users SET state=? WHERE sessionID=?', (json.dumps(state), sid))
-                return json.dumps(state)
-            else:
-                return "401"
+        if 'username' in session:
+            if request.form.get('change') == 'state':
+                pieces = request.form.get('id').split('-')
+                buttonRow = int(pieces[1])
+                buttonCol = int(pieces[2])
+                with sqlite3.connect("database.db") as connection:
+                    cursor = connection.cursor()
+                    cursor.execute('SELECT state FROM users WHERE username=?', (session['username'],))
+                    user = cursor.fetchone()
+                    if user:
+                        state = json.loads(user[0])
+                        state[buttonRow][buttonCol] = not state[buttonRow][buttonCol]
+                        cursor.execute('UPDATE users SET state=? WHERE username=?', (json.dumps(state), session['username']))
+                        return json.dumps(state)
+                    else:
+                        return "401"
+            if request.form.get('change') == 'color':
+                with sqlite3.connect("database.db") as connection:
+                    cursor = connection.cursor()
+                    print(request.form.get('color'))
+                    cursor.execute('UPDATE users SET color=? WHERE username=?', (request.form.get('color'), session['username']))
+                    return "200"
+        return "401"
+        
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -87,23 +93,16 @@ def login():
             if not sha256.verify(password, hashed_password):
                 flash("Incorrect username or password")
                 return make_response(redirect("/login"))
-        
-            res = make_response(redirect("/"))
-            sessionID = sha256.hash(f"{username}{password}")
-            cursor.execute('UPDATE users SET sessionID=? WHERE username=?', (sessionID, username))
-            res.set_cookie('sessionID', sessionID)
 
+            session['username'] = username
+            res = make_response(redirect("/"))
             return res
 
 @app.route("/logout", methods=["GET"])
 def logout():
-    sid = request.cookies.get("sessionID")
-    with sqlite3.connect("database.db") as connection:
-        cursor = connection.cursor()
-        cursor.execute('UPDATE users SET sessionID="" WHERE sessionID=?', (sid,))
-        res = make_response(redirect("/"))
-        res.set_cookie('sessionID', "", expires=0)
-        return res
+    session.pop('username', None)
+    res = make_response(redirect("/"))
+    return res
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -138,14 +137,16 @@ def signup():
                 return make_response(redirect("/signup"))
             
             hashed_password = sha256.hash(password)
-            cursor.execute('INSERT INTO users VALUES (?, ?, ?, ?)', (username, hashed_password, str(json.dumps([[False]*10]*10)), ""))
+            cursor.execute('INSERT INTO users VALUES (?, ?, ?, ?)', (username, hashed_password, str(json.dumps([[False]*10]*10)), "#ffff00"))
         
+            session['username'] = username
             res = make_response(redirect("/"))
-            sessionID = sha256.hash(f"{username}{password}")
-            cursor.execute('UPDATE users SET sessionID=? WHERE username=?', (sessionID, username))
-            res.set_cookie('sessionID', sessionID)
-
             return res
+
+@app.route('/account', methods=['GET'])
+def account():
+    if request.method == 'GET':
+        return render_template('account.html')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=os.getenv("PORT", default=8000), debug=True)

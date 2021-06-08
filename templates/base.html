@@ -14,10 +14,11 @@
             <div>
                 {% if not logged_in %}
                 <a href="/login" id="login">Login</a>
+                <a href="/signup" id="signup">Sign Up</a>
                 {% else %}
+                <a href="/account" id="account">Account</a>
                 <a href="/logout" id="logout">Logout</a>
                 {% endif %}
-                <a href="/signup" id="signup">Sign Up</a>
             </div>
         </div>
         <div id="site-messages">
