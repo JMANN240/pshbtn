@@ -153,4 +153,4 @@ def account():
         return render_template('account.html')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=os.getenv("PORT", default=8000), debug=bool(os.getenv("PORT", default=True)))
+    app.run(host="0.0.0.0", port=os.getenv("PORT", default=8000), debug=bool(os.getenv("DEBUG", default=True)))
