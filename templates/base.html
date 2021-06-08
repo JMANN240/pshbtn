@@ -9,10 +9,11 @@
         <link rel="icon" type="image/png" href="{{url_for('static', filename='favicon-96x96.png')}}" sizes="96x96">
         {% if debug %}
         <script defer src="{{url_for('static', filename='js/jquery-3.6.0.js')}}"></script>
+        <script defer src="{{url_for('static', filename='js/tinycolor.js')}}"></script>
         {% else %}
         <script defer src="{{url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
+        <script defer src="{{url_for('static', filename='js/tinycolor.min.js')}}"></script>
         {% endif %}
-        <script defer src="{{url_for('static', filename='js/tinycolor.js')}}"></script>
         {% block header %}{% endblock %}
     </head>
     <body>
