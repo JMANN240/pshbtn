@@ -1,6 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
 
+@media (prefers-color-scheme: light) {
+    :root {
+        --prim: #ffffff;
+        --prim-shadow: #d0d0d0;
+        --prim-shadow-sec: #c0c0c0;
+        --sec: #000000;
+        --light: #ffff00;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --prim: #202020;
+        --prim-shadow: #101010;
+        --prim-shadow-sec: #000000;
+        --sec: #ffffff;
+        --light: #00ffff;
+    }
+}
+
 * {
+    color: var(--sec);
     margin: 0;
     padding: 0;
 }
@@ -10,6 +31,7 @@ html {
 }
 
 body {
+    background-color: var(--prim);
     display: flex;
     flex-direction: column;
     width: 100vw;
@@ -28,22 +50,29 @@ body {
     justify-content: center;
 }
 
-#logo,
-#login,
-#signup,
-#logout,
-#account {
+.header-btn {
     font-family: 'Roboto', sans-serif;
     font-weight: 100;
     text-decoration: none;
-    color: black;
     font-size: 3vmin;
     margin: 1vmin;
-    -webkit-box-shadow: 0px 5px 10px 2px #d0d0d0;
-    box-shadow: 0px 5px 10px 2px #d0d0d0;
+    -webkit-box-shadow: 0 4px 0 0 var(--prim-shadow-sec), 0px 4px 10px 2px var(--prim-shadow);
+    box-shadow: 0 4px 0 0 var(--prim-shadow-sec), 0px 4px 10px 2px var(--prim-shadow);
     border-radius: 1vmin;
     margin: 1vmin;
     padding: 0.5vmin;
+}
+
+.header-btn:hover {
+    -webkit-box-shadow: 0 3px 0 0 var(--prim-shadow-sec), 0px 3px 7.5px 1.5px var(--prim-shadow);
+    box-shadow: 0 3px 0 0 var(--prim-shadow-sec), 0px 3px 7.5px 1.5px var(--prim-shadow);
+    transform: translateY(1px);
+}
+
+.header-btn:active {
+    -webkit-box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
+    box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
+    transform: translateY(4px);
 }
 
 #site-messages {
@@ -61,8 +90,8 @@ body {
 
 .card {
     border-radius: 2vmin;
-    -webkit-box-shadow: 0px 5px 10px 2px #d0d0d0;
-    box-shadow: 0px 5px 10px 2px #d0d0d0;
+    -webkit-box-shadow: 0px 5px 10px 2px var(--prim-shadow);
+    box-shadow: 0px 5px 10px 2px var(--prim-shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,12 +119,15 @@ body {
     margin: 1vmin;
     padding: 0.5vmin;
     border-radius: 1vmin;
-    background-color: white;
     border: 0px solid black;
-    -webkit-box-shadow: 0px 5px 10px 2px #d0d0d0;
-    box-shadow: 0px 5px 10px 2px #d0d0d0;
+    -webkit-box-shadow: 0px 5px 10px 2px var(--prim-shadow);
+    box-shadow: 0px 5px 10px 2px var(--prim-shadow);
+}
+
+input {
+    background-color: var(--prim);
 }
 
 input:focus {
-    outline: 3px solid gold;
+    outline: 3px solid var(--light-darker);
 }

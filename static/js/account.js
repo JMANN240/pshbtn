@@ -13,10 +13,6 @@ $('#color-pref').on('change', (e) => {
         type: 'POST',
         url: '/api/user',
         data: {change: 'color', color: e.target.value},
-        mimeType: 'json',
-        success: (req) => {
-            console.log(req);
-        }
+        mimeType: 'json'
     });
-    console.log(e.target.value);
 });

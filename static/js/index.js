@@ -11,14 +11,15 @@ $(document).ready(() => {
         type: 'GET',
         url: '/api/user',
         success: (req) => {
-            console.log(req);
-            document.documentElement.style.setProperty('--light', req.color);
-            document.documentElement.style.setProperty('--light-darker', tinycolor(req.color).darken(2).toString());
-            for (let [row, rowvals] of req.state.entries()) {
-                for (let [col, value] of rowvals.entries()) {
-                    $(`#btn-${row}-${col}`).attr('checked', value);
+            if (req != "401") {
+                document.documentElement.style.setProperty('--light', req.color);
+                for (let [row, rowvals] of req.state.entries()) {
+                    for (let [col, value] of rowvals.entries()) {
+                        $(`#btn-${row}-${col}`).attr('checked', value);
+                    }
                 }
             }
+            document.documentElement.style.setProperty('--light-darker', tinycolor(getComputedStyle(document.documentElement).getPropertyValue('--light')).darken(3).toString());
         }
     });
 });
@@ -28,10 +29,7 @@ $(document).on('click', '.btn', (e) => {
         type: 'POST',
         url: '/api/user',
         data: {change: 'state', id: e.target.id},
-        mimeType: 'json',
-        success: (req) => {
-            console.log(req);
-        }
+        mimeType: 'json'
     });
     navigator.vibrate(100);
 });

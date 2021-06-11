@@ -41,7 +41,7 @@ def user():
                     return {"state": json.loads(user[0]), "color": user[1]}
                 else:
                     return "401"
-        return {"state": [[False]*10]*10, "color": "#ffff00"}
+        return "401"
 
     if request.method == 'POST':
         if 'username' in session:
@@ -124,6 +124,11 @@ def signup():
             flash("No password provided")
             return make_response(redirect("/signup"))
         
+        color = request.form.get("color")
+        if not color:
+            flash("Somehow, your browser was not able to detect your preferred color scheme with JavaScript. For being such a tricky little user, you get blood red as your default.")
+            color = "#ff0000"
+        
         confirm_password = request.form.get("confirm-password")
         if not confirm_password:
             flash("No confirmation password provided")
@@ -141,7 +146,7 @@ def signup():
                 return make_response(redirect("/signup"))
             
             hashed_password = sha256.hash(password)
-            cursor.execute('INSERT INTO users VALUES (?, ?, ?, ?)', (username, hashed_password, str(json.dumps([[False]*10]*10)), "#ffff00"))
+            cursor.execute('INSERT INTO users VALUES (?, ?, ?, ?)', (username, hashed_password, str(json.dumps([[False]*10]*10)), color))
         
             session['username'] = username
             res = make_response(redirect("/"))
