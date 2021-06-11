@@ -23,19 +23,23 @@
     border-radius: 2vmin;
     -webkit-box-shadow: 0 4px 0 0 var(--prim-shadow-sec), 0px 4px 10px 2px var(--prim-shadow);
     box-shadow: 0 4px 0 0 var(--prim-shadow-sec), 0px 4px 10px 2px var(--prim-shadow);
+    -webkit-transform: translateY(-2px);
     transform: translateY(-2px);
+    -webkit-transition-duration: 0.1s;
     transition-duration: 0.1s;
 }
 
 .btn:hover {
     -webkit-box-shadow: 0 3px 0 0 var(--prim-shadow-sec), 0px 3px 7.5px 1.5px var(--prim-shadow);
     box-shadow: 0 3px 0 0 var(--prim-shadow-sec), 0px 3px 7.5px 1.5px var(--prim-shadow);
+    -webkit-transform: translateY(-1px);
     transform: translateY(-1px);
 }
 
 .btn:active {
     -webkit-box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
     box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
+    -webkit-transform: translateY(2px);
     transform: translateY(2px);
 }
 
@@ -43,12 +47,21 @@ input[type="checkbox"]:checked + .btn {
     background-color: var(--light);
     -webkit-box-shadow: 0 4px 0 0 var(--light-shadow), 0 0 20px 0 var(--light-darker), 0 0 5px 5px var(--light-darker) inset;
     box-shadow: 0 4px 0 0 var(--light-shadow), 0 0 20px 0 var(--light-darker), 0 0 5px 5px var(--light-darker) inset;
+    -webkit-transform: translateY(-2px);
     transform: translateY(-2px);
+}
+
+input[type="checkbox"]:checked + .btn:hover {
+    -webkit-box-shadow: 0 3px 0 0 var(--light-shadow), 0 0 15px 0 var(--light-darker), 0 0 3.75px 3.75px var(--light-darker) inset;
+    box-shadow: 0 3px 0 0 var(--light-shadow), 0 0 15px 0 var(--light-darker), 0 0 3.75px 3.75px var(--light-darker) inset;
+    -webkit-transform: translateY(-1px);
+    transform: translateY(-1px);
 }
 
 input[type="checkbox"]:checked + .btn:active {
     background-color: var(--prim);
     -webkit-box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
     box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
+    -webkit-transform: translateY(2px);
     transform: translateY(2px);
 }

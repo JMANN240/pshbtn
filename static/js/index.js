@@ -1,4 +1,5 @@
-const click = new Audio("/static/click.wav")
+const click = new Audio('/static/click.wav');
+
 
 $(document).ready(() => {
     for (let row = 0; row < 10; row++) {
@@ -34,7 +35,8 @@ $(document).on('click', '.btn', (e) => {
         data: {change: 'state', id: e.target.id},
         mimeType: 'json'
     });
-    new Audio("/static/click.wav").play();
+    click.pause();
+    click.currentTime = 0;
+    click.play();
     navigator.vibrate(100);
-
 });
