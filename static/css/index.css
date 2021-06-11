@@ -41,7 +41,14 @@
 
 input[type="checkbox"]:checked + .btn {
     background-color: var(--light);
-    -webkit-box-shadow: 0 0 20px 0 var(--light-darker), 0 0 5px 5px var(--light-darker) inset;
-    box-shadow: 0 0 20px 0 var(--light-darker), 0 0 5px 5px var(--light-darker) inset;
+    -webkit-box-shadow: 0 4px 0 0 var(--light-shadow), 0 0 20px 0 var(--light-darker), 0 0 5px 5px var(--light-darker) inset;
+    box-shadow: 0 4px 0 0 var(--light-shadow), 0 0 20px 0 var(--light-darker), 0 0 5px 5px var(--light-darker) inset;
+    transform: translateY(-2px);
+}
+
+input[type="checkbox"]:checked + .btn:active {
+    background-color: var(--prim);
+    -webkit-box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
+    box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
     transform: translateY(2px);
 }

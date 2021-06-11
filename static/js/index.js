@@ -1,3 +1,5 @@
+const click = new Audio("/static/click.wav")
+
 $(document).ready(() => {
     for (let row = 0; row < 10; row++) {
         for (let col = 0; col < 10; col++) {
@@ -20,6 +22,7 @@ $(document).ready(() => {
                 }
             }
             document.documentElement.style.setProperty('--light-darker', tinycolor(getComputedStyle(document.documentElement).getPropertyValue('--light')).darken(3).toString());
+            document.documentElement.style.setProperty('--light-shadow', tinycolor(getComputedStyle(document.documentElement).getPropertyValue('--light')).darken(20).toString());
         }
     });
 });
@@ -31,5 +34,7 @@ $(document).on('click', '.btn', (e) => {
         data: {change: 'state', id: e.target.id},
         mimeType: 'json'
     });
+    new Audio("/static/click.wav").play();
     navigator.vibrate(100);
+
 });
