@@ -50,7 +50,7 @@ body {
     justify-content: center;
 }
 
-.header-btn {
+.word-btn {
     font-family: 'Roboto', sans-serif;
     font-weight: 100;
     text-decoration: none;
@@ -63,13 +63,13 @@ body {
     padding: 0.5vmin;
 }
 
-.header-btn:hover {
+.word-btn:hover {
     -webkit-box-shadow: 0 3px 0 0 var(--prim-shadow-sec), 0px 3px 7.5px 1.5px var(--prim-shadow);
     box-shadow: 0 3px 0 0 var(--prim-shadow-sec), 0px 3px 7.5px 1.5px var(--prim-shadow);
     transform: translateY(1px);
 }
 
-.header-btn:active {
+.word-btn:active {
     -webkit-box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
     box-shadow: 0 0 0 0 var(--prim-shadow-sec), 0 0 0 0 var(--prim-shadow);
     transform: translateY(4px);

@@ -19,15 +19,15 @@
     <body>
         <div id="site-header">
             <div>
-                <a href="/" id="logo" class="header-btn">PSHBTN</a>
+                <a href="/" id="logo" class="word-btn">PSHBTN</a>
             </div>
             <div>
                 {% if not logged_in %}
-                <a href="/login" id="login" class="header-btn">Login</a>
-                <a href="/signup" id="signup" class="header-btn">Sign Up</a>
+                <a href="/login" id="login" class="word-btn">Login</a>
+                <a href="/signup" id="signup" class="word-btn">Sign Up</a>
                 {% else %}
-                <a href="/account" id="account" class="header-btn">Account</a>
-                <a href="/logout" id="logout" class="header-btn">Logout</a>
+                <a href="/account" id="account" class="word-btn">Account</a>
+                <a href="/logout" id="logout" class="word-btn">Logout</a>
                 {% endif %}
             </div>
         </div>

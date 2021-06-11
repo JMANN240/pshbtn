@@ -152,6 +152,47 @@ def signup():
             res = make_response(redirect("/"))
             return res
 
+@app.route("/reset-password", methods=["GET", "POST"])
+def reset_password():
+    if 'username' not in session:
+        flash("You are not logged in")
+        return make_response(redirect("/login"))
+
+    if request.method == 'GET':
+        return render_template('reset-password.html')
+    
+    if request.method == 'POST':
+        current_password = request.form.get("current-password")
+        if not current_password:
+            flash("No current password provided")
+            return make_response(redirect("/reset-password"))
+        
+        new_password = request.form.get("new-password")
+        if not new_password:
+            flash("No new password provided")
+            return make_response(redirect("/reset-password"))
+        
+        confirm_new_password = request.form.get("confirm-new-password")
+        if not confirm_new_password:
+            flash("No confirmation new password provided")
+            return make_response(redirect("/reset-password"))
+        
+        if new_password != confirm_new_password:
+            flash("New passwords do not match")
+            return make_response(redirect("/reset-password"))
+        
+        with sqlite3.connect("database.db") as connection:
+            cursor = connection.cursor()
+            cursor.execute('SELECT password FROM users WHERE username=?', (session['username'],))
+            hashed_password = cursor.fetchone()[0]
+            if not sha256.verify(current_password, hashed_password):
+                flash("Incorrect current password")
+                return make_response(redirect("/reset-password"))
+            new_hashed_password = sha256.hash(new_password)
+            cursor.execute('UPDATE users SET password=? WHERE username=?', (new_hashed_password, session['username']))
+            res = make_response(redirect("/account"))
+            return res
+
 @app.route('/account', methods=['GET'])
 def account():
     if request.method == 'GET':
