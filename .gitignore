@@ -1,3 +1,4 @@
 .env
 env
 static/click.aup
+__pycache__

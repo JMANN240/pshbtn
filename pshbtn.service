@@ -1,0 +1,13 @@
+[Unit]
+Description = uWSGI instance to server pshbtn
+After = network.target
+
+[Service]
+User = root
+Group = www-data
+WorkingDirectory = /home/pshbtn
+Environment = "PATH=/home/pshbtn/env/bin"
+ExecStart = /home/pshbtn/env/bin/uwsgi --ini /home/pshbtn/pshbtn.ini
+
+[Install]
+WantedBy = multi-user.target
